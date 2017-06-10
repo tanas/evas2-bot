@@ -26,4 +26,4 @@ pip3 install telepot
    ```
    python3 create_db.py
    ```
-4) Schedule running `python3 emb.py` script via cronetab
+4) Schedule running `python3 emb.py` via cronetab
