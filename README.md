@@ -9,6 +9,21 @@ Telegram бот, который присылает уведомления при
  - /stop -  прекратить получение уведомлений
  
 
+# Contributing
 
+### Dependencies
 
+```
+apt install python3 python3-pip
+pip3 install telepot
+```
 
+### How to install
+
+1) Copy `config.ini.dist` to `config.ini`
+2) Create telegram bot and set the token
+3) Create db
+   ```
+   python3 create_db.py
+   ```
+4) Schedule running `python3 emb.py` script via cronetab
