@@ -1,0 +1,5 @@
+[bot]
+token=
+
+[sqlite]
+db_name=main.db
