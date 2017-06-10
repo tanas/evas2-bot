@@ -9,7 +9,7 @@
  - /stop -  прекратить получение уведомлений
  
 
-# Contributing
+# Contribute or set up your own bot
 
 ### Dependencies
 
