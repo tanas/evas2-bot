@@ -1,10 +1,12 @@
 import sqlite3
+import os
 import configparser
 
 config = configparser.ConfigParser()
 config.read('config.ini')
 
-con = sqlite3.connect(config['sqlite']['db_name'])
+cur_dir = os.path.dirname(os.path.abspath(__file__))
+con = sqlite3.connect(cur_dir+'/'+config['sqlite']['db_name'])
 
 with con:
     cur = con.cursor()
