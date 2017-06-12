@@ -7,10 +7,11 @@ import sqlite3
 import configparser
 import os
 
-config = configparser.ConfigParser()
-config.read('config.ini')
-
 cur_dir = os.path.dirname(os.path.abspath(__file__))
+
+config = configparser.ConfigParser()
+config.read(cur_dir+'/config.ini')
+
 con = sqlite3.connect(cur_dir+'/'+config['sqlite']['db_name'])
 cursor = con.cursor()
 bot = telepot.Bot(config['bot']['token'])
@@ -29,7 +30,7 @@ def send_notify(dates):
     for row in cursor:
         user_id = row[0]
         message = '%s\n%s\ngo to https://evas2.urm.lt/ru/visit/' % ('Embassy available dates:', ', '.join(dates))
-        print(bot.sendMessage(user_id, message))
+        bot.sendMessage(user_id, message)
 
 
 def parse_subscriptions():
