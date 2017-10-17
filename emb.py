@@ -77,13 +77,12 @@ def parse_dates():
 def check():
     dates = parse_dates()
     print('%s %s' % (datetime.now().strftime("%Y-%m-%d %H:%M:%S"), '[' + ', '.join(dates) + ']'))
-
-    if len(dates) > 0:
-        send_notify(dates)
-
     cursor.execute("INSERT INTO log(dates, created_at) VALUES(?,?)",
                 (json.dumps(dates), datetime.now().strftime("%Y-%m-%d %H:%M:%S"),))
     con.commit()
+
+    if len(dates) > 0:
+        send_notify(dates)
 
 
 parse_subscriptions()
