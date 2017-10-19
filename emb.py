@@ -36,7 +36,6 @@ def send_notify(dates):
             if e.error_code == 403:
                 cursor.execute('UPDATE user SET notify = 0 WHERE id = {0}'.format(user_id))
                 con.commit()
-            pass
 
 
 def parse_subscriptions():
