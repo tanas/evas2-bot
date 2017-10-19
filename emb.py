@@ -30,7 +30,13 @@ def send_notify(dates):
     for row in cursor:
         user_id = row[0]
         message = '%s\n%s\ngo to https://evas2.urm.lt/ru/visit/' % ('Embassy available dates:', ', '.join(dates))
-        bot.sendMessage(user_id, message)
+        try:
+            bot.sendMessage(user_id, message)
+        except telepot.exception.BotWasBlockedError as e:
+            if e.error_code == 403:
+                cursor.execute('UPDATE user SET notify = 0 WHERE id = {0}'.format(user_id))
+                con.commit()
+            pass
 
 
 def parse_subscriptions():
@@ -76,13 +82,15 @@ def parse_dates():
 
 def check():
     dates = parse_dates()
-    print('%s %s' % (datetime.now().strftime("%Y-%m-%d %H:%M:%S"), '[' + ', '.join(dates) + ']'))
+
     cursor.execute("INSERT INTO log(dates, created_at) VALUES(?,?)",
                 (json.dumps(dates), datetime.now().strftime("%Y-%m-%d %H:%M:%S"),))
     con.commit()
 
     if len(dates) > 0:
         send_notify(dates)
+
+    print('%s %s' % (datetime.now().strftime("%Y-%m-%d %H:%M:%S"), '[' + ', '.join(dates) + ']'))
 
 
 parse_subscriptions()
