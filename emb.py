@@ -18,13 +18,6 @@ bot = telepot.Bot(config['bot']['token'])
 
 
 def send_notify(dates):
-    cursor.execute('SELECT dates FROM log ORDER BY id DESC LIMIT 1')
-    last_log = cursor.fetchone()
-    last_log_dates = json.loads(last_log[0])
-
-    if len(last_log_dates) > 0:
-        return
-
     cursor.execute('SELECT id FROM user WHERE notify = 1')
 
     for row in cursor:
@@ -76,18 +69,24 @@ def parse_dates():
         if len(dates) == 1 and len(dates[0]) == 0:
             dates = []
 
+
+
     return dates
 
 
 def check():
     dates = parse_dates()
 
-    cursor.execute("INSERT INTO log(dates, created_at) VALUES(?,?)",
-                (json.dumps(dates), datetime.now().strftime("%Y-%m-%d %H:%M:%S"),))
-    con.commit()
+    cursor.execute('SELECT dates FROM log ORDER BY id DESC LIMIT 1')
+    last_log = cursor.fetchone()
+    last_log_dates = json.loads(last_log[0])
 
-    if len(dates) > 0:
+    if len(dates) > 0 and not last_log_dates:
         send_notify(dates)
+
+    cursor.execute("INSERT INTO log(dates, created_at) VALUES(?,?)",
+                   (json.dumps(dates), datetime.now().strftime("%Y-%m-%d %H:%M:%S"),))
+    con.commit()
 
     print('%s %s' % (datetime.now().strftime("%Y-%m-%d %H:%M:%S"), '[' + ', '.join(dates) + ']'))
 
